@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const { noteSchema } = require("./note");
 
 const Schema = mongoose.Schema;
 
@@ -24,15 +25,18 @@ const users = new Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password"],
-    validate: {
-      validator: function (el) {
-        return el === this.password;
-      },
-      message: "Passwords are not the same!",
-    },
   },
- 
+  notes: {
+    type: [noteSchema],
+    default: [],
+  },
+});
+users.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  if (this.passwordConfirm !== this.password) {
+    throw new Error("Password does not match");
+  } else next();
 });
 
 users.pre("save", async function (next) {
