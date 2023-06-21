@@ -8,14 +8,21 @@ const jwtCookieExpiresIn = process.env.expiresIn || "";
 
 const API = {
   routes: {
-    editNote: "/editNote",
+    editNote: "/editNote/:email/:name",
     addNote: "/addNote",
-    deleteNote: "/deleteNote",
-    getNotes: "/getNotes",
+    deleteNote: "/deleteNote/:email/:name",
+    getNotes: "/getNotes/:email",
     login: "/login",
     register: "/register",
     test: "/test",
   },
+};
+
+const noteCategories = {
+  reminder: "reminder",
+  regular: "regular",
+  important: "important",
+  random: "random",
 };
 
 module.exports = {
@@ -24,5 +31,6 @@ module.exports = {
   jwtSecret,
   expiresIn,
   API,
-  jwtCookieExpiresIn
+  jwtCookieExpiresIn,
+  noteCategories,
 };
